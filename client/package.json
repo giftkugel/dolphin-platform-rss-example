@@ -1,0 +1,23 @@
+{
+  "name": "dolphin-platform-rss-client",
+  "version": "0.0.1",
+  "description": "The Polymer client for the Dolphin Platform RSS Example",
+  "main": "index.js",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "bower": "^1.8.2",
+    "copy-webpack-plugin": "^4.3.1",
+    "html-webpack-plugin": "^2.30.1",
+    "polymer-webpack-loader": "^2.0.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.10.0"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --open",
+    "build": "npm install && ./node_modules/.bin/bower install && webpack --debug=true",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simon Skoczylas",
+  "license": "MIT"
+}

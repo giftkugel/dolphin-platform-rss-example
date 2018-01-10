@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = 'com.canoo.dolphin.rss.server.RSSFeedServer'
+
+dependencies {
+    compile 'com.canoo.dolphin-platform:dolphin-platform-remoting-server-spring:1.0.0.CR2'
+    compile 'com.rometools:rome:1.9.0'
+    compile 'javax.inject:javax.inject:1'
+}

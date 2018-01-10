@@ -1,0 +1,1 @@
+import './rssfeed-view.html';
