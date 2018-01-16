@@ -1,0 +1,9 @@
+client/node_modules/
+client/bower_components/
+client/.idea/
+client/dist/
+.DS_Store
+server/build/
+server/.gradle/
+server/.idea/
+server/out/

@@ -1,0 +1,36 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="rssfeed-view.html">
+
+<dom-module id="rssfeed-app">
+    <template>
+        <h1>RSS Feeds</h1>
+        <rssfeed-view></rssfeed-view>
+    </template>
+    <script>
+        class RSSFeedApp extends Polymer.Element {
+            static get is() {
+                return "rssfeed-app";
+            }
+        }
+
+
+        function createClientContext(url) {
+            const factory = new dolphin.ClientContextFactory();
+            const config = {};
+            return factory.create(url, config);
+        }
+
+        window.clientContext = createClientContext("http://localhost:8080/dolphin");
+        window.clientContext.onConnect()
+            .then(function () {
+                console.log("Dolphin connected...");
+            })
+            .catch(function (error) {
+                console.log("error", error);
+            });
+
+        window.customElements.define(RSSFeedApp.is, RSSFeedApp);
+    </script>
+</dom-module>
