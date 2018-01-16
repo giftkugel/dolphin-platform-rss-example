@@ -1,1 +1,1 @@
-import './rssfeed-view.html';
+import './rssfeed-app.html';
