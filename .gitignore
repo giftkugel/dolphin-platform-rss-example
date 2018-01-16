@@ -5,3 +5,4 @@ client/.idea/
 server/build/
 server/.gradle/
 server/.idea/
+server/out/
