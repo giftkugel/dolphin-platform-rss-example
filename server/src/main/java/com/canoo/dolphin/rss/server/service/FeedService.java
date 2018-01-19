@@ -43,11 +43,11 @@ public class FeedService {
         executor.scheduleAtFixedRate(() -> {
             feeds.forEach(url -> {
                 try {
-                    LOG.info("Fetching feed for: {}", url);
                     final URL feedUrl = new URL(url);
 
                     final SyndFeedInput input = new SyndFeedInput();
                     final SyndFeed feed = input.build(new XmlReader(feedUrl));
+                    feed.setUri(url);
 
                     collectedFeeds.put(url, feed);
 
@@ -61,11 +61,10 @@ public class FeedService {
                         }
                     }).collect(Collectors.toList()));
 
+                    LOG.info("Updated {} with {} entries", url, feed.getEntries().size());
+
                     final Topic<String> topic = Topic.create("update");
                     eventBus.publish(topic, url);
-                    LOG.info("Count: {}, {}", feed.getEntries().size(), feed.getEntries().get(0).getPublishedDate());
-
-
                 } catch (IOException | FeedException exception) {
                     LOG.error("Could not fetch or parse RSS feed for: {}", url);
                 }

@@ -1,11 +1,44 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
 <link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="rssfeed-view.html">
 
 <dom-module id="rssfeed-app">
     <template>
-        <h1>RSS Feeds</h1>
+        <custom-style>
+            <style is="custom-style" include="paper-material-styles"></style>
+        </custom-style>
+        <style>
+            app-toolbar {
+                background-color: #4285f4;
+                color: #fff;
+            }
+
+            paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+
+            paper-icon-button + [main-title] {
+                margin-left: 24px;
+            }
+            app-header {
+                @apply --layout-fixed-top;
+                color: #fff;
+                --app-header-background-rear-layer: {
+                    background-color: #ef6c00;
+                };
+            }
+        </style>
+        <app-header>
+            <app-toolbar>
+                <div main-title>RSS Feeds</div>
+            </app-toolbar>
+        </app-header>
         <rssfeed-view></rssfeed-view>
     </template>
     <script>

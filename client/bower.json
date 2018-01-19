@@ -21,8 +21,9 @@
     "paper-input": "PolymerElements/paper-input#^2.0.2",
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "paper-styles": "PolymerElements/paper-styles#^2.0.0",
-    "app-layout": "",
-    "polymer": "^2.1.1"
+    "app-layout": "PolymerElements/app-layout#^2.0.4",
+    "polymer": "^2.1.1",
+    "dolphin-platform-js": "https://github.com/canoo/dolphin-platform-js.git#1791c7a11d1a960a0a260f4d925a27f8c57389af"
   },
   "resolutions": {
     "iron-icon": "^2.0.1",
@@ -32,6 +33,7 @@
     "paper-item": "^2.0.0",
     "paper-styles": "^2.0.0",
     "polymer": "^2.1.1",
-    "webcomponentsjs": "^v1.0.2"
+    "webcomponentsjs": "^v1.0.2",
+    "dolphin-platform-js": "1791c7a11d1a960a0a260f4d925a27f8c57389af"
   }
 }

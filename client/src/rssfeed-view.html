@@ -12,21 +12,23 @@
 
 <dom-module id="rssfeed-view">
   <template>
-      <h2>View</h2>
+      <h2 paper-font-title>View</h2>
 
-    <dolphin-controller id="controller" name="FeedController" model="{{model}}"></dolphin-controller>
+      <dolphin-controller id="controller" name="FeedController" model="{{model}}"></dolphin-controller>
 
-    <div class="layout center-justified">
-      <template is="dom-repeat" items="[[model.feedEntries]]" as="entry">
-        <h2>[[entry.name]]</h2>
-        <template is="dom-repeat" items="[[entry.items]]" as="item">
-          <paper-item>
-            <paper-item-body>[[item.time]] | [[item.text]]</paper-item-body>
-          </paper-item>
+      <div class="layout center-justified">
+        <template is="dom-repeat" items="[[model.feedEntries]]" as="entry">
+          <h2>[[entry.name]]</h2>
+          <template is="dom-repeat" items="[[entry.items]]" as="item">
+            <paper-item>
+              <paper-item-body two-line>
+                <div>[[item.text]]</div>
+                <div secondary>[[item.time]]</div>
+              </paper-item-body>
+            </paper-item>
+          </template>
         </template>
-      </template>
-    </div>
-
+      </div>
 
   </template>
 

@@ -34,7 +34,6 @@ public class FeedController {
         this.beanManager = beanManager;
         this.feedService = feedService;
         this.eventBus = eventBus;
-        LOG.debug("constructor done");
     }
 
     @PostConstruct
@@ -42,25 +41,26 @@ public class FeedController {
         feedService.getFeedsAsStream().forEach(feed -> {
             final FeedEntry feedEntry = beanManager.create(FeedEntry.class).withName(feed.getTitle()).withUrl(feed.getUri());
             feed.getEntries().stream().forEach(entry -> {
-                final FeedItem feedItem = beanManager.create(FeedItem.class).withText(entry.getTitle()).withTime(entry.getPublishedDate().toString());
+                final FeedItem feedItem = beanManager.create(FeedItem.class).withText(entry.getTitle()).withTime(entry.getPublishedDate().toString()).withDate(entry.getPublishedDate());
                 feedEntry.getItems().add(feedItem);
             });
             feedList.getFeedEntries().add(feedEntry);
         });
         final Topic<String> topic = Topic.create("update");
         eventBus.subscribe(topic, message -> update(message.getData()));
-        LOG.debug("init method");
     }
 
     private void update(final String url) {
         feedService.getFeedsAsStream().filter(syndFeed -> syndFeed.getUri().equals(url)).forEach(feed -> {
-            final FeedEntry feedEntry = beanManager.create(FeedEntry.class).withName(feed.getTitle()).withUrl(feed.getUri());
-            feed.getEntries().stream().forEach(entry -> {
-                final FeedItem feedItem = beanManager.create(FeedItem.class).withText(entry.getTitle()).withTime(entry.getPublishedDate().toString());
-                feedEntry.getItems().add(feedItem);
+            feedList.getFeedEntries().stream().filter(feedEntry -> feedEntry.getUrl().equals(url)).forEach(feedEntry -> {
+                feed.getEntries().stream().forEach(entry -> {
+                    final FeedItem feedItem = beanManager.create(FeedItem.class).withText(entry.getTitle()).withTime(entry.getPublishedDate().toString()).withDate(entry.getPublishedDate());
+                    if (!feedEntry.getItems().contains(feedItem)) {
+                        LOG.debug("Item added {}‚ '{}'", feedItem.getTime(), feedItem.getText());
+                        feedEntry.getItems().add(0, feedItem);
+                    }
+                });
             });
-            feedList.getFeedEntries().add(feedEntry);
-            LOG.debug("updated {}", url);
         });
     }
 
