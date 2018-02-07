@@ -11,8 +11,6 @@ public class FeedItem {
 
     private Property<String> text;
 
-    private Property<String> time;
-
     private Property<Date> date;
 
     public String getText() {
@@ -21,18 +19,6 @@ public class FeedItem {
 
     public Property<String> textProperty() {
         return text;
-    }
-
-    public String getTime() {
-        return time.get();
-    }
-
-    public Property<String> timeProperty() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time.set(time);
     }
 
     public void setText(final String text) {
@@ -56,11 +42,6 @@ public class FeedItem {
         return this;
     }
 
-    public FeedItem withTime(final String time) {
-        setTime(time);
-        return this;
-    }
-
     public FeedItem withDate(final Date date) {
         setDate(date);
         return this;
@@ -68,7 +49,7 @@ public class FeedItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(text.get(), time.get(), date.get());
+        return Objects.hash(text.get(), date.get());
     }
 
     @Override
@@ -81,7 +62,6 @@ public class FeedItem {
         }
         final FeedItem other = (FeedItem) obj;
         return Objects.equals(this.text.get(), other.text.get())
-                && Objects.equals(this.time.get(), other.time.get())
                 && Objects.equals(this.date.get(), other.date.get());
     }
 }

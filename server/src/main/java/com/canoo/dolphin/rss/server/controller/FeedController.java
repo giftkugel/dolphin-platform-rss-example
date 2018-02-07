@@ -4,6 +4,7 @@ import com.canoo.dolphin.rss.server.model.FeedEntry;
 import com.canoo.dolphin.rss.server.model.FeedItem;
 import com.canoo.dolphin.rss.server.model.FeedList;
 import com.canoo.dolphin.rss.server.service.FeedService;
+import com.canoo.dolphin.rss.server.service.NewItemsEvent;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.stream.Collectors;
 
 @DolphinController("FeedController")
 public class FeedController {
@@ -38,30 +40,31 @@ public class FeedController {
 
     @PostConstruct
     public void onInit() {
-        feedService.getFeedsAsStream().forEach(feed -> {
-            final FeedEntry feedEntry = beanManager.create(FeedEntry.class).withName(feed.getTitle()).withUrl(feed.getUri());
-            feed.getEntries().stream().forEach(entry -> {
-                final FeedItem feedItem = beanManager.create(FeedItem.class).withText(entry.getTitle()).withTime(entry.getPublishedDate().toString()).withDate(entry.getPublishedDate());
+        feedService.getFeeds().forEach(feed -> {
+            final FeedEntry feedEntry = beanManager.create(FeedEntry.class)
+                    .withName(feed.getTitle())
+                    .withUrl(feed.getUrl());
+            feed.getItems().forEach(entry -> {
+                final FeedItem feedItem = beanManager.create(FeedItem.class)
+                        .withText(entry.getTitle())
+                        .withDate(entry.getDate());
                 feedEntry.getItems().add(feedItem);
             });
             feedList.getFeedEntries().add(feedEntry);
         });
-        final Topic<String> topic = Topic.create("update");
+        final Topic<NewItemsEvent> topic = Topic.create("update");
         eventBus.subscribe(topic, message -> update(message.getData()));
     }
 
-    private void update(final String url) {
-        feedService.getFeedsAsStream().filter(syndFeed -> syndFeed.getUri().equals(url)).forEach(feed -> {
-            feedList.getFeedEntries().stream().filter(feedEntry -> feedEntry.getUrl().equals(url)).forEach(feedEntry -> {
-                feed.getEntries().stream().forEach(entry -> {
-                    final FeedItem feedItem = beanManager.create(FeedItem.class).withText(entry.getTitle()).withTime(entry.getPublishedDate().toString()).withDate(entry.getPublishedDate());
-                    if (!feedEntry.getItems().contains(feedItem)) {
-                        LOG.debug("Item added {}‚ '{}'", feedItem.getTime(), feedItem.getText());
-                        feedEntry.getItems().add(0, feedItem);
-                    }
-                });
-            });
-        });
+    private void update(final NewItemsEvent event) {
+        LOG.debug("Updating {}", event.getUrl());
+        feedList.getFeedEntries().stream()
+                .filter(feedEntry -> event.getUrl().equals(feedEntry.getUrl()))
+                .forEach(feedEntry -> feedEntry.getItems().addAll(0, event.getItems().stream()
+                        .map(feedItem -> beanManager.create(FeedItem.class)
+                                .withText(feedItem.getTitle())
+                                .withDate(feedItem.getDate()))
+                        .collect(Collectors.toList())));
     }
 
 }
